@@ -8,50 +8,58 @@ class App extends Component {
     super(props);
 
     this.state = {
-      currentUser: {name: "Bob"},
+      currentUser: [],
       messages: []
     };
     this.onNewMessage = this.onNewMessage.bind(this);
   }
 
-  load() {
-    console.log('Loadding...')
-      this.setState({
-        messages: [{
-          id: '1',
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-        },
-        {
-          id: '2',
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        }],
-        currentUser: {name: "Bob"}
-      }
-    );
-  }
 
   componentDidMount() {
-    this.load();
+    this.connection = new WebSocket('ws:localhost:3001')
+    this.connection.onmessage = evt => {
+      let data = JSON.parse(evt.data);
+      console.log(evt.data.users)
+      console.log(data)
+      switch(data.type) {
+        case "incommingCount":
+          console.log('msg')
+          this.setState({userCount: data.users})
+          break;
+        case "incomingMessage":
+          console.log('msg')
+          let messages = this.state.messages.concat(data)
+          this.setState({messages: messages})
+          break;
+        case "incomingNotification":
+          console.log('changed username');
+          data.notification = (data.usernameOld + ' changed their name to ' + data.username + '.');
+          messages = this.state.messages.concat(data);
+          this.setState({messages: messages});
+          break;
+        default:
+          console.log('didnt hit anything')
+        // show an error in the console if the message type is unknown
+    }
+
+
+    }
+        console.log('Connected to server')
   }
 
   onNewMessage(content) {
-    if(content){
-    const messages = this.state.messages.concat(content)
-    console.log(content);
-    this.setState({messages: messages})
-    }
+    //console.log(content);
+    this.connection.send(JSON.stringify(content));
   }
 
 
   render() {
     return (
       <div>
-      <Nav/>
-      <MessageList messages   = {this.state.messages}/>
-      <ChatBar  onNewMessage  = {this.onNewMessage}
-                currentUser   = {this.state.currentUser.name}/>
+      <Nav userCount = {this.state.userCount}/>
+      <MessageList messages = {this.state.messages}/>
+      <ChatBar  onNewMessage = {this.onNewMessage}
+                currentUser = {this.state.currentUser.name}/>
       </div>
     )
   }

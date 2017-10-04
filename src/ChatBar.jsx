@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 
 class ChatBar extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
       this.state = {
-        //id: '',
-        username: '',
+        type: 'postMessage',
+        username: props.currentUser,
         content: ''
       }
 
@@ -14,12 +14,12 @@ class ChatBar extends Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
-  componentDidMount() {
-    this.setState({
-      //id: ,
-      username: this.props.currentUser
-    });
-  }
+  // componentDidMount() {
+  //   this.setState({
+  //     //id: ,
+  //     username: this.props.currentUser
+  //   });
+  // }
 
   onContent(event) {
     this.setState({
@@ -29,13 +29,19 @@ class ChatBar extends Component {
 
   onUser(event) {
     this.setState({
+      type: 'postNotification',
+      usernameOld: this.props.currentUser,
       username: event.target.value || 'Anonymous'
     });
   }
 
   handleKeyPress(event) {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && this.state.content.length > 0) {
       this.props.onNewMessage(this.state);
+      this.setState({
+        type: 'postMessage',
+        content: ''
+      });
     }
   }
 
@@ -45,7 +51,7 @@ class ChatBar extends Component {
               onKeyPress={this.handleKeyPress} >
         <input  className='chatbar-username'
                 placeholder='Your Name ( Optional)'
-                defaultValue={this.state.username || this.props.currentUser}
+                defaultValue={this.props.currentUser || this.state.username }
                 onChange={ this.onUser }/>
         <input  className='chatbar-message'
                 placeholder='Type a message and hit ENTER'
