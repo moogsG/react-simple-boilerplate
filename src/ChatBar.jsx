@@ -5,7 +5,6 @@ class ChatBar extends Component {
     super(props);
     this.state = {
       type: 'postMessage',
-      usernameOld: 'Anon',
       content: ''
     }
 
@@ -22,6 +21,25 @@ class ChatBar extends Component {
     this.setState({
       content: event.target.value
     });
+    let content = this.state.content.split(' ');
+    switch (content[0]) {
+      case '/img':
+        this.setState({
+          type: 'postImg'
+        });
+      break;
+      default:
+        if(this.state.usernameOld === this.state.username) {
+        this.setState({
+          type: 'postMessage'
+        });
+      } else {
+          this.setState({
+            type: 'postNotification'
+          });
+      }
+      break;
+    };
   }
 
   /*onUser
@@ -42,38 +60,18 @@ class ChatBar extends Component {
    */
   handleKeyPress(event) {
     if (event.key === 'Enter' && this.state.content.length > 0) {
-      if (this.state.content[0] == '/') {
-        let content = this.state.content.split(' ');
-        let cmd = content.shift().replace('/', '');
-        let msg = content.join(' ');
-        switch (cmd) {
-          case 'img':
-            this.setState({
-              type: 'postImg',
-              content: ''
-              })
-            break;
-          default:
-        }
-
-      }else {
+      this.props.onNewMessage(this.state);
         this.setState({
-          type: 'postMessage',
           usernameOld: this.state.username,
           content: ''
         });
-      }
-        this.props.onNewMessage(this.state);
-
-
-
     }
   }
 
   render() {
     return (
       <footer className="chatbar"
-              onKeyPress={this.handleKeyPress} >
+              onKeyPress={this.handleKeyPress}>
 
         <input  className='chatbar-username'
                 placeholder='Your Name ( Optional)'
@@ -83,7 +81,7 @@ class ChatBar extends Component {
         <input  className='chatbar-message'
                 placeholder='Type a message and hit ENTER'
                 onChange={ this.onContent }
-                value={ this.state.content }
+                value={this.state.content}
                 />
 
       </footer>

@@ -75,14 +75,15 @@ wss.on('connection', (ws, req) => {
   ws.on('message', incoming = (data) => {
     let id = uuidv1();
     data = JSON.parse(data);
+    console.log(data);
     switch (data.type) {
       case "postImg":
-        console.log('postImg')
+        let content = data.content.split(' ');
         dataT = {
           id: id,
           type: 'incommingImg',
           username: data.username || 'Anonymous',
-          img: data.content
+          img: content[1]
         }
         break;
       case "postMessage":
@@ -106,13 +107,8 @@ wss.on('connection', (ws, req) => {
       default:
         throw new Error("Unknown event type " + data.type);
     }
-
-    ws.send(JSON.stringify(dataT));
-    wss.clients.forEach(each = (client) => {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify(dataT));
-      }
-    });
+    wss.broadcast(JSON.stringify(dataT));
+    //ws.send(JSON.stringify(dataT));
   });
   ws.on('close', () => {
     users--;
