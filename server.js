@@ -63,25 +63,19 @@ wss.on('connection', (ws, req) => {
   console.log('Client connected');
   users++;
   userNum = {
-    type: 'incommingCount',
+    type: 'incomingCount',
     users: users
   }
-  wss.clients.forEach(each = (client) => {
-    if (client !== ws && client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify(userNum));
-    }
-  });
-  ws.send(JSON.stringify(userNum));
+  wss.broadcast(JSON.stringify(userNum));
   ws.on('message', incoming = (data) => {
     let id = uuidv1();
     data = JSON.parse(data);
-    console.log(data);
     switch (data.type) {
       case "postImg":
         let content = data.content.split(' ');
         dataT = {
           id: id,
-          type: 'incommingImg',
+          type: 'incomingImg',
           username: data.username || 'Anonymous',
           img: content[1]
         }
@@ -108,19 +102,15 @@ wss.on('connection', (ws, req) => {
         throw new Error("Unknown event type " + data.type);
     }
     wss.broadcast(JSON.stringify(dataT));
-    //ws.send(JSON.stringify(dataT));
+
   });
   ws.on('close', () => {
     users--;
     userNum = {
-      type: 'incommingCount',
+      type: 'incomingCount',
       users: users
     }
-    wss.clients.forEach(each = (client) => {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify(userNum));
-      }
-    });
+    wss.broadcast(JSON.stringify(userNum));
     console.log('Client disconnected')
   });
 });

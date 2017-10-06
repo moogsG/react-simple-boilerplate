@@ -19,20 +19,17 @@ class App extends Component {
 *Switch to check data type and render
 */
   componentDidMount() {
-    this.connection = new WebSocket('ws:localhost:3001')
+    this.connection = new WebSocket('ws:localhost:3001');
     this.connection.onmessage = event => {
       let data = JSON.parse(event.data);
       switch(data.type) {
-        case "incommingImg":
-          console.log('incommingImg' + data)
-          messages = this.state.messages.concat(data)
-          this.setState({messages: messages})
-        case "incommingCount":
-          this.setState({userCount: data.users})
+        case "incomingCount":
+          this.setState({userCount: data.users});
         break;
+        case "incomingImg":
         case "incomingMessage":
-          let messages = this.state.messages.concat(data)
-          this.setState({messages: messages})
+          let messages = this.state.messages.concat(data);
+          this.setState({messages: messages});
         break;
         case "incomingNotification":
           data.notification = (data.usernameOld + ' changed their name to ' + data.username + '.');

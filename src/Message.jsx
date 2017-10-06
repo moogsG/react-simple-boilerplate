@@ -8,9 +8,10 @@ import stringToColour from '../textColour.js';
       });
      }
     render() {
-            var style = {
-      color: stringToColour(this.props.username)
-    };
+      let style = {
+        color: stringToColour(this.props.username)
+      };
+
       return (
         <div>
           <div className="message system">
