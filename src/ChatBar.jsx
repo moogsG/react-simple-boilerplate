@@ -19,6 +19,7 @@ class ChatBar extends Component {
    * Sets message to content
    */
   onContent(event) {
+
     this.setState({
       content: event.target.value
     });
@@ -48,10 +49,12 @@ class ChatBar extends Component {
    * Sets username
    */
   onUser(event) {
+
     this.setState({
       type: 'postNotification',
       username: event.target.value
     });
+
   }
 
   /*KeyPress Handle
@@ -62,10 +65,12 @@ class ChatBar extends Component {
   handleKeyPress(event) {
     if (event.key === 'Enter' && this.state.content.length > 0) {
       this.props.onNewMessage(this.state);
+
         this.setState({
           usernameOld: this.state.username,
           content: ''
         });
+
     }
   }
 

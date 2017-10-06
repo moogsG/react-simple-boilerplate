@@ -60,12 +60,12 @@ class App extends Component {
   render() {
     return (
       <div>
-      <Nav userCount = {this.state.userCount}/>
-      <MessageList messages = {this.state.messages}/>
-      <ChatBar
-        onNewMessage = {this.onNewMessage}
-        username = {this.state.username}
-      />
+        <Nav userCount = {this.state.userCount}/>
+        <MessageList messages = {this.state.messages}/>
+        <ChatBar
+          onNewMessage = {this.onNewMessage}
+          username = {this.state.username}
+        />
       </div>
     )
   }

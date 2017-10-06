@@ -14,7 +14,7 @@ A minimal and light example of React JS.
 open http://localhost:3000
 
 ### Features
-!["Usernames have colours based on username."]()
+!["Usernames have colours based on username."](https://raw.githubusercontent.com/moogsG/react-simple-boilerplate/master/docs/Screenshot%20from%202017-10-06%2010-16-46.png)
 
 Add images to chat through
 ```
