@@ -8,9 +8,9 @@ class App extends Component {
     super(props);
 
     this.state = {
-      currentUser: '',
       messages: []
     };
+
     this.onNewMessage = this.onNewMessage.bind(this);
   }
 
@@ -20,8 +20,10 @@ class App extends Component {
 */
   componentDidMount() {
     this.connection = new WebSocket('ws:localhost:3001');
+
     this.connection.onmessage = event => {
       let data = JSON.parse(event.data);
+
       switch(data.type) {
         case "incomingCount":
           this.setState({userCount: data.users});
@@ -34,10 +36,12 @@ class App extends Component {
         case "incomingNotification":
           data.notification = (data.usernameOld + ' changed their name to ' + data.username + '.');
           messages = this.state.messages.concat(data);
+
           this.setState({
             messages: messages,
-            currentUser: data.username
+            username: data.username
           });
+
         break;
         default:
           //error handling here
@@ -58,8 +62,10 @@ class App extends Component {
       <div>
       <Nav userCount = {this.state.userCount}/>
       <MessageList messages = {this.state.messages}/>
-      <ChatBar  onNewMessage = {this.onNewMessage}
-                username = {this.state.currentUser}/>
+      <ChatBar
+        onNewMessage = {this.onNewMessage}
+        username = {this.state.username}
+      />
       </div>
     )
   }

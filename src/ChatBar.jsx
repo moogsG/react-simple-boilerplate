@@ -11,6 +11,7 @@ class ChatBar extends Component {
     this.onContent = this.onContent.bind(this);
     this.onUser = this.onUser.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+
   }
 
   /*onContent

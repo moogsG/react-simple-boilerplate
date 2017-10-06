@@ -5,16 +5,16 @@ class MessageList extends Component {
   render() {
     const messages = this.props.messages.map(message => {
     return <Message
-      key=     { message.id}
+      key={message.id}
       username={ message.username }
-      content= { message.content }
+      content={ message.content }
       img={ message.img }
       notification={ message.notification }/>
     });
 
     return (
       <main className="messages">
-        { messages }
+        {messages}
       </main>
     )
   }
