@@ -5,7 +5,9 @@ class ChatBar extends Component {
     super(props);
     this.state = {
       type: 'postMessage',
-      content: ''
+      content: '',
+      username: '',
+      usernameOld: ''
     }
 
     this.onContent = this.onContent.bind(this);

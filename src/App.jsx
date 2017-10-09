@@ -8,7 +8,9 @@ class App extends Component {
     super(props);
 
     this.state = {
-      messages: []
+      messages: [],
+      username: '',
+      userCount: ''
     };
 
     this.onNewMessage = this.onNewMessage.bind(this);
@@ -48,6 +50,7 @@ class App extends Component {
       }
     }
     console.log('Connected to server');
+
   }
 
 /*NewMessage
@@ -72,4 +75,3 @@ class App extends Component {
 }
 
 export default App;
-
